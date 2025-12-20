@@ -27,8 +27,10 @@ const LoginScreen = ({ navigation }) => {
     const [mobileError, setMobileError] = useState('');
     const [showToast, setShowToast] = useState(false);
     const [mockOtp, setMockOtp] = useState('123456'); // Mock OTP for demo
+    const [isAutoFilling, setIsAutoFilling] = useState(false); // Auto-fill animation state
     const toastAnim = useRef(new Animated.Value(-100)).current;
     const otpRefs = useRef([]);
+    const autoFillTimeoutRef = useRef(null);
 
     useEffect(() => {
         let interval;
@@ -39,6 +41,45 @@ const LoginScreen = ({ navigation }) => {
         }
         return () => clearInterval(interval);
     }, [isOtpSent, timer]);
+
+    // Cleanup auto-fill timeout on unmount
+    useEffect(() => {
+        return () => {
+            if (autoFillTimeoutRef.current) {
+                clearTimeout(autoFillTimeoutRef.current);
+            }
+        };
+    }, []);
+
+    // Auto-fill OTP function - simulates automatic OTP detection
+    const autoFillOtp = (otpString) => {
+        setIsAutoFilling(true);
+        const otpArray = otpString.split('');
+
+        // Animate filling each digit with a slight delay for visual effect
+        otpArray.forEach((digit, index) => {
+            setTimeout(() => {
+                setOtp(prev => {
+                    const newOtp = [...prev];
+                    newOtp[index] = digit;
+                    return newOtp;
+                });
+
+                // Check if all filled after last digit
+                if (index === otpArray.length - 1) {
+                    setIsOtpValid(true);
+                    setIsAutoFilling(false);
+                }
+            }, index * 100); // 100ms delay between each digit
+        });
+    };
+
+    // Manual auto-fill button handler
+    const handleAutoFillOtp = () => {
+        if (isOtpSent && mockOtp) {
+            autoFillOtp(mockOtp);
+        }
+    };
 
     const validateMobile = (number) => {
         const cleaned = number.replace(/\D/g, '');
@@ -80,6 +121,10 @@ const LoginScreen = ({ navigation }) => {
             setMobileError('Please enter a valid 10-digit mobile number');
             return;
         }
+        // Clear any previous OTP
+        setOtp(['', '', '', '', '', '']);
+        setIsOtpValid(false);
+
         // Generate a random 6-digit OTP for demo
         const generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
         setMockOtp(generatedOtp);
@@ -87,8 +132,18 @@ const LoginScreen = ({ navigation }) => {
         setIsOtpSent(true);
         setTimer(30);
         showOtpToast();
+
         // Focus first OTP input
         setTimeout(() => otpRefs.current[0]?.focus(), 100);
+
+        // Auto-fill OTP after 2 seconds (simulating SMS detection)
+        // Clear any previous timeout
+        if (autoFillTimeoutRef.current) {
+            clearTimeout(autoFillTimeoutRef.current);
+        }
+        autoFillTimeoutRef.current = setTimeout(() => {
+            autoFillOtp(generatedOtp);
+        }, 2000);
     };
 
     const handleOtpChange = (text, index) => {
@@ -125,8 +180,25 @@ const LoginScreen = ({ navigation }) => {
 
     const handleResendOtp = () => {
         if (timer === 0) {
+            // Clear previous OTP
+            setOtp(['', '', '', '', '', '']);
+            setIsOtpValid(false);
+
+            // Generate new OTP
+            const generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
+            setMockOtp(generatedOtp);
+            console.log('Resent OTP:', generatedOtp);
+
             setTimer(30);
             showOtpToast();
+
+            // Auto-fill after 2 seconds
+            if (autoFillTimeoutRef.current) {
+                clearTimeout(autoFillTimeoutRef.current);
+            }
+            autoFillTimeoutRef.current = setTimeout(() => {
+                autoFillOtp(generatedOtp);
+            }, 2000);
         }
     };
 
@@ -236,17 +308,34 @@ const LoginScreen = ({ navigation }) => {
                                 style={[
                                     styles.otpInput,
                                     !isOtpSent && styles.otpInputDisabled,
+                                    isAutoFilling && styles.otpInputAutoFill,
                                 ]}
                                 value={digit}
                                 onChangeText={text => handleOtpChange(text, index)}
                                 onKeyPress={e => handleOtpKeyPress(e, index)}
                                 keyboardType="number-pad"
                                 maxLength={1}
-                                editable={isOtpSent}
+                                editable={isOtpSent && !isAutoFilling}
                                 secureTextEntry
                             />
                         ))}
                     </View>
+
+                    {/* Auto-fill OTP Button */}
+                    {isOtpSent && !isOtpValid && (
+                        <TouchableOpacity
+                            style={[
+                                styles.autoFillButton,
+                                isAutoFilling && styles.autoFillButtonDisabled,
+                            ]}
+                            onPress={handleAutoFillOtp}
+                            disabled={isAutoFilling}>
+                            <Text style={styles.autoFillIcon}>✨</Text>
+                            <Text style={styles.autoFillText}>
+                                {isAutoFilling ? 'Auto-filling...' : 'Auto-fill OTP'}
+                            </Text>
+                        </TouchableOpacity>
+                    )}
                 </View>
 
                 {/* Login Button */}
@@ -495,6 +584,33 @@ const styles = StyleSheet.create({
     },
     otpInputDisabled: {
         opacity: 0.4,
+    },
+    otpInputAutoFill: {
+        backgroundColor: 'rgba(46, 204, 113, 0.1)',
+    },
+    autoFillButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'rgba(46, 204, 113, 0.15)',
+        paddingVertical: 12,
+        paddingHorizontal: 20,
+        borderRadius: 25,
+        marginTop: 12,
+        borderWidth: 1,
+        borderColor: COLORS.primary,
+    },
+    autoFillButtonDisabled: {
+        opacity: 0.6,
+    },
+    autoFillIcon: {
+        fontSize: 16,
+        marginRight: 8,
+    },
+    autoFillText: {
+        color: COLORS.primary,
+        fontSize: 14,
+        fontWeight: '600',
     },
     loginButton: {
         flexDirection: 'row',
