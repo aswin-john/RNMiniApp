@@ -484,6 +484,8 @@ const styles = StyleSheet.create({
     phoneFlagButton: {
         borderTopLeftRadius: 12,
         borderBottomLeftRadius: 12,
+        borderRightWidth: 1,
+        borderRightColor: COLORS.border,
     },
     errorText: {
         color: COLORS.error,
