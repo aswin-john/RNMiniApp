@@ -13,6 +13,12 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import PhoneInput from 'react-native-phone-number-input';
+import Toast from '../components/common/Toast/Toast';
+import CustomButton from '../components/common/Button/CustomButton';
+import TextDivider from '../components/common/TextDivider/TextDivider';
+import LoginHeader from '../components/auth/LoginHeader/LoginHeader';
+import PhoneSection from '../components/auth/PhoneSection/PhoneSection';
+import OtpSection from '../components/auth/OtpSection/OtpSection';
 import { COLORS } from '../utils/constants';
 import { useAuth } from '../context/AuthContext';
 
@@ -168,10 +174,6 @@ const LoginScreen = ({ navigation }) => {
                 });
             } else {
                 setOtpError('Invalid OTP. Please try again.');
-                // Optional: clear OTP on error
-                // setOtp(['', '', '', '', '', '']);
-                // setIsOtpValid(false);
-                // otpRefs.current[0]?.focus();
             }
         }
     };
@@ -206,21 +208,12 @@ const LoginScreen = ({ navigation }) => {
             style={styles.container}>
             <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
 
-            {/* Toast Notification */}
-            {showToast && (
-                <Animated.View
-                    style={[styles.toast, { transform: [{ translateY: toastAnim }] }]}>
-                    <View style={styles.toastContent}>
-                        <View style={styles.checkCircle}>
-                            <Text style={styles.checkMark}>✓</Text>
-                        </View>
-                        <View>
-                            <Text style={styles.toastTitle}>OTP Sent!</Text>
-                            <Text style={styles.toastSubtitle}>Your OTP: {mockOtp}</Text>
-                        </View>
-                    </View>
-                </Animated.View>
-            )}
+            <Toast
+                visible={showToast}
+                title="OTP Sent!"
+                subtitle={`Your OTP: ${mockOtp}`}
+                translateAnim={toastAnim}
+            />
 
             <KeyboardAvoidingView
                 behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}
@@ -232,143 +225,73 @@ const LoginScreen = ({ navigation }) => {
                     showsVerticalScrollIndicator={false}
                     bounces={false}>
 
-                    {/* Lock Icon */}
-                    <View style={styles.lockContainer}>
-                        <View style={styles.lockIcon}>
-                            <Text style={styles.lockEmoji}>🔒</Text>
-                        </View>
-                    </View>
+                    <LoginHeader
+                        title="Secure OTP Login"
+                        subtitle="Verify your identity to access your dashboard."
+                    />
 
-                    <Text style={styles.title}>Secure OTP Login</Text>
-                    <Text style={styles.subtitle}>
-                        Verify your identity to access your dashboard.
-                    </Text>
+                    <PhoneSection
+                        phoneInputRef={phoneInput}
+                        value={value}
+                        onChangeText={(text) => {
+                            setValue(text);
+                            const checkValid = phoneInput.current?.isValidNumber(text);
+                            setValid(checkValid);
+                            setMobileError('');
+                        }}
+                        onChangeFormattedText={(text) => {
+                            setFormattedValue(text);
+                        }}
+                        error={mobileError}
+                    />
 
-                    {/* Mobile Number Section */}
-                    <View style={styles.sectionContainer}>
-                        <Text style={styles.label}>MOBILE NUMBER</Text>
-                        <PhoneInput
-                            ref={phoneInput}
-                            defaultValue={value}
-                            defaultCode="IN"
-                            layout="first"
-                            onChangeText={(text) => {
-                                setValue(text);
-                                const checkValid = phoneInput.current?.isValidNumber(text);
-                                setValid(checkValid);
-                                setMobileError('');
-                            }}
-                            onChangeFormattedText={(text) => {
-                                setFormattedValue(text);
-                            }}
-                            containerStyle={styles.phoneContainer}
-                            textContainerStyle={styles.phoneTextContainer}
-                            textInputStyle={styles.phoneTextInput}
-                            codeTextStyle={styles.phoneCodeText}
-                            flagButtonStyle={styles.phoneFlagButton}
-                            renderDropdownImage={<Text style={{ color: 'white', fontSize: 10 }}>▼</Text>}
-                            placeholder="Enter mobile number"
-                            withDarkTheme
-                            autoFocus={false}
-                        />
-                        {mobileError ? (
-                            <Text style={styles.errorText}>{mobileError}</Text>
-                        ) : null}
-                    </View>
-
-                    {/* Send OTP Button */}
-                    <TouchableOpacity
-                        style={[
-                            styles.sendOtpButton,
-                            !valid && styles.buttonDisabled,
-                        ]}
+                    <CustomButton
+                        title="Send Verification Code"
                         onPress={handleSendOtp}
-                        disabled={!valid}>
-                        <Text style={styles.sendOtpText}>Send Verification Code</Text>
-                        <Text style={styles.sendOtpArrow}>➤</Text>
-                    </TouchableOpacity>
+                        disabled={!valid}
+                        solid={true}
+                        backgroundColor={COLORS.primary}
+                        arrow="➤"
+                        style={{ marginTop: 10 }}
+                    />
 
-                    {/* OTP Section */}
-                    <View style={styles.thenContainer}>
-                        <View style={styles.thenLine} />
-                        <Text style={styles.thenText}>THEN</Text>
-                        <View style={styles.thenLine} />
-                    </View>
+                    <TextDivider text="THEN" />
 
-                    <View style={styles.otpSection}>
-                        <View style={styles.otpHeader}>
-                            <Text style={styles.label}>ONE-TIME PASSWORD</Text>
-                            <Text style={styles.timerText}>
-                                {timer > 0 ? `Resend in 00:${timer.toString().padStart(2, '0')}` : (
-                                    <Text onPress={handleResendOtp} style={styles.resendLink}>Resend</Text>
-                                )}
-                            </Text>
-                        </View>
-                        <View style={styles.otpContainer}>
-                            <View style={styles.otpIcon}>
-                                <Text style={styles.keyEmoji}>🔑</Text>
-                            </View>
-                            {otp.map((digit, index) => (
-                                <TextInput
-                                    key={index}
-                                    ref={ref => (otpRefs.current[index] = ref)}
-                                    style={[
-                                        styles.otpInput,
-                                        !isOtpSent && styles.otpInputDisabled,
-                                        isAutoFilling && styles.otpInputAutoFill,
-                                        otpError && styles.otpInputError,
-                                    ]}
-                                    value={digit}
-                                    onChangeText={text => handleOtpChange(text, index)}
-                                    onKeyPress={e => handleOtpKeyPress(e, index)}
-                                    keyboardType="number-pad"
-                                    maxLength={1}
-                                    editable={isOtpSent && !isAutoFilling}
-                                    secureTextEntry
-                                />
-                            ))}
-                        </View>
+                    <OtpSection
+                        otp={otp}
+                        otpRefs={otpRefs}
+                        isOtpSent={isOtpSent}
+                        isOtpValid={isOtpValid}
+                        isAutoFilling={isAutoFilling}
+                        otpError={otpError}
+                        timer={timer}
+                        onOtpChange={handleOtpChange}
+                        onOtpKeyPress={handleOtpKeyPress}
+                        onResendOtp={handleResendOtp}
+                        onAutoFillOtp={handleAutoFillOtp}
+                    />
 
-                        {otpError ? (
-                            <Text style={styles.otpErrorText}>{otpError}</Text>
-                        ) : null}
-
-                        {/* Auto-fill OTP Button */}
-                        {isOtpSent && !isOtpValid && (
-                            <TouchableOpacity
-                                style={[
-                                    styles.autoFillButton,
-                                    isAutoFilling && styles.autoFillButtonDisabled,
-                                ]}
-                                onPress={handleAutoFillOtp}
-                                disabled={isAutoFilling}>
-                                <Text style={styles.autoFillIcon}>✨</Text>
-                                <Text style={styles.autoFillText}>
-                                    {isAutoFilling ? 'Auto-filling...' : 'Auto-fill OTP'}
-                                </Text>
-                            </TouchableOpacity>
-                        )}
-                    </View>
-
-                    {/* Login Button */}
-                    <TouchableOpacity
-                        style={[
-                            styles.loginButton,
-                            !isOtpValid && styles.loginButtonDisabled,
-                        ]}
+                    <CustomButton
+                        title="Login to Account"
                         onPress={handleLogin}
-                        disabled={!isOtpValid}>
-                        <Text style={[
-                            styles.loginButtonText,
-                            !isOtpValid && styles.loginButtonTextDisabled,
-                        ]}>
-                            Login to Account
-                        </Text>
-                        <Text style={[
-                            styles.loginArrow,
-                            !isOtpValid && styles.loginButtonTextDisabled,
-                        ]}>↵</Text>
-                    </TouchableOpacity>
+                        disabled={!isOtpValid}
+                        solid={true}
+                        backgroundColor={COLORS.surface}
+                        arrow="↵"
+                        style={{
+                            borderWidth: 1,
+                            borderColor: isOtpValid ? COLORS.primary : COLORS.border,
+                            borderRadius: 30, // Redundant but safe
+                            overflow: 'hidden'
+                        }}
+                        textStyle={{
+                            color: isOtpValid ? COLORS.primary : COLORS.textMuted,
+                            marginRight: 8
+                        }}
+                        arrowStyle={{
+                            color: isOtpValid ? COLORS.primary : COLORS.textMuted,
+                        }}
+                    />
 
                     <Text style={styles.termsText}>
                         By logging in, you agree to our{' '}
@@ -389,44 +312,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
     },
-    toast: {
-        position: 'absolute',
-        top: 0,
-        left: 20,
-        right: 20,
-        zIndex: 100,
-        backgroundColor: COLORS.surface,
-        borderRadius: 25,
-        padding: 12,
-        borderWidth: 1,
-        borderColor: COLORS.primary,
-    },
-    toastContent: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    checkCircle: {
-        width: 30,
-        height: 30,
-        borderRadius: 15,
-        backgroundColor: COLORS.primary,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginRight: 10,
-    },
-    checkMark: {
-        color: COLORS.background,
-        fontWeight: 'bold',
-    },
-    toastTitle: {
-        color: COLORS.text,
-        fontSize: 14,
-        fontWeight: '600',
-    },
-    toastSubtitle: {
-        color: COLORS.textSecondary,
-        fontSize: 12,
-    },
     keyboardView: {
         flex: 1,
     },
@@ -435,226 +320,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 25,
         paddingTop: 80,
         paddingBottom: 40,
-    },
-    content: {
-        flex: 1,
-        paddingHorizontal: 25,
-        paddingTop: 80,
-    },
-    lockContainer: {
-        alignItems: 'center',
-        marginBottom: 20,
-    },
-    lockIcon: {
-        width: 60,
-        height: 60,
-        borderRadius: 15,
-        backgroundColor: COLORS.primary,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    lockEmoji: {
-        fontSize: 28,
-    },
-    title: {
-        fontSize: 24,
-        fontWeight: '700',
-        color: COLORS.text,
-        textAlign: 'center',
-        marginBottom: 8,
-    },
-    subtitle: {
-        fontSize: 14,
-        color: COLORS.textSecondary,
-        textAlign: 'center',
-        marginBottom: 30,
-    },
-    sectionContainer: {
-        marginBottom: 15,
-    },
-    label: {
-        fontSize: 11,
-        color: COLORS.textMuted,
-        letterSpacing: 1,
-        marginBottom: 10,
-    },
-    phoneContainer: {
-        width: '100%',
-        backgroundColor: COLORS.surface,
-        borderRadius: 12,
-        height: 60,
-    },
-    phoneTextContainer: {
-        backgroundColor: 'transparent',
-        paddingVertical: 0,
-        borderRadius: 12,
-    },
-    phoneTextInput: {
-        color: COLORS.text,
-        fontSize: 16,
-        paddingVertical: 0,
-    },
-    phoneCodeText: {
-        color: COLORS.text,
-        fontSize: 16,
-    },
-    phoneFlagButton: {
-        borderTopLeftRadius: 12,
-        borderBottomLeftRadius: 12,
-        borderRightWidth: 1,
-        borderRightColor: COLORS.border,
-    },
-    errorText: {
-        color: COLORS.error,
-        fontSize: 12,
-        marginTop: 5,
-    },
-    sendOtpButton: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: COLORS.primary,
-        paddingVertical: 16,
-        borderRadius: 30,
-        marginBottom: 20,
-        marginTop: 10,
-    },
-    buttonDisabled: {
-        opacity: 0.5,
-    },
-    sendOtpText: {
-        color: COLORS.background,
-        fontSize: 16,
-        fontWeight: '600',
-        marginRight: 8,
-    },
-    sendOtpArrow: {
-        color: COLORS.background,
-        fontSize: 16,
-    },
-    thenContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 20,
-    },
-    thenLine: {
-        flex: 1,
-        height: 1,
-        backgroundColor: COLORS.border,
-    },
-    thenText: {
-        color: COLORS.textMuted,
-        fontSize: 12,
-        marginHorizontal: 15,
-        letterSpacing: 2,
-    },
-    otpSection: {
-        marginBottom: 20,
-    },
-    otpHeader: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: 10,
-    },
-    timerText: {
-        color: COLORS.textSecondary,
-        fontSize: 12,
-    },
-    resendLink: {
-        color: COLORS.primary,
-    },
-    otpContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: COLORS.surface,
-        borderRadius: 12,
-        paddingHorizontal: 12,
-        paddingVertical: 10,
-    },
-    otpIcon: {
-        marginRight: 10,
-    },
-    keyEmoji: {
-        fontSize: 18,
-    },
-    otpInput: {
-        flex: 1,
-        height: 45,
-        backgroundColor: 'transparent',
-        color: COLORS.text,
-        fontSize: 24,
-        textAlign: 'center',
-        marginHorizontal: 2,
-    },
-    otpInputDisabled: {
-        opacity: 0.4,
-    },
-    otpInputAutoFill: {
-        backgroundColor: 'rgba(46, 204, 113, 0.1)',
-    },
-    otpInputError: {
-        borderBottomWidth: 2,
-        borderBottomColor: COLORS.error,
-        color: COLORS.error,
-    },
-    otpErrorText: {
-        color: COLORS.error,
-        fontSize: 12,
-        marginTop: 8,
-        textAlign: 'center',
-    },
-    autoFillButton: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: 'rgba(46, 204, 113, 0.15)',
-        paddingVertical: 12,
-        paddingHorizontal: 20,
-        borderRadius: 25,
-        marginTop: 12,
-        borderWidth: 1,
-        borderColor: COLORS.primary,
-    },
-    autoFillButtonDisabled: {
-        opacity: 0.6,
-    },
-    autoFillIcon: {
-        fontSize: 16,
-        marginRight: 8,
-    },
-    autoFillText: {
-        color: COLORS.primary,
-        fontSize: 14,
-        fontWeight: '600',
-    },
-    loginButton: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: COLORS.surface,
-        paddingVertical: 16,
-        borderRadius: 30,
-        marginBottom: 20,
-        borderWidth: 1,
-        borderColor: COLORS.primary,
-    },
-    loginButtonDisabled: {
-        borderColor: COLORS.border,
-        backgroundColor: COLORS.surface,
-    },
-    loginButtonText: {
-        color: COLORS.primary,
-        fontSize: 16,
-        fontWeight: '600',
-        marginRight: 8,
-    },
-    loginButtonTextDisabled: {
-        color: COLORS.textMuted,
-    },
-    loginArrow: {
-        color: COLORS.primary,
-        fontSize: 18,
     },
     termsText: {
         color: COLORS.textSecondary,
