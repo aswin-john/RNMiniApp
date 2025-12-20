@@ -10,6 +10,7 @@ import {
     Platform,
     Animated,
     Dimensions,
+    ScrollView,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { COLORS } from '../utils/constants';
@@ -225,143 +226,150 @@ const LoginScreen = ({ navigation }) => {
             )}
 
             <KeyboardAvoidingView
-                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                style={styles.content}>
+                behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}
+                style={styles.keyboardView}
+                keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}>
+                <ScrollView
+                    contentContainerStyle={styles.scrollContent}
+                    keyboardShouldPersistTaps="handled"
+                    showsVerticalScrollIndicator={false}
+                    bounces={false}>
 
-                {/* Lock Icon */}
-                <View style={styles.lockContainer}>
-                    <View style={styles.lockIcon}>
-                        <Text style={styles.lockEmoji}>🔒</Text>
-                    </View>
-                </View>
-
-                <Text style={styles.title}>Secure OTP Login</Text>
-                <Text style={styles.subtitle}>
-                    Verify your identity to access your dashboard.
-                </Text>
-
-                {/* Mobile Number Section */}
-                <View style={styles.sectionContainer}>
-                    <Text style={styles.label}>MOBILE NUMBER</Text>
-                    <View style={styles.mobileInputContainer}>
-                        <View style={styles.countryCode}>
-                            <Text style={styles.flag}>🇺🇸</Text>
-                            <Text style={styles.codeText}>+1</Text>
-                        </View>
-                        <View style={styles.mobileInputWrapper}>
-                            <Text style={styles.phoneIcon}>📱</Text>
-                            <TextInput
-                                style={styles.mobileInput}
-                                placeholder="555-000-0000"
-                                placeholderTextColor={COLORS.textMuted}
-                                value={mobileNumber}
-                                onChangeText={handleMobileChange}
-                                keyboardType="phone-pad"
-                                maxLength={12}
-                            />
-                            {validateMobile(mobileNumber) && (
-                                <Text style={styles.validCheck}>✓</Text>
-                            )}
+                    {/* Lock Icon */}
+                    <View style={styles.lockContainer}>
+                        <View style={styles.lockIcon}>
+                            <Text style={styles.lockEmoji}>🔒</Text>
                         </View>
                     </View>
-                    {mobileError ? (
-                        <Text style={styles.errorText}>{mobileError}</Text>
-                    ) : null}
-                </View>
 
-                {/* Send OTP Button */}
-                <TouchableOpacity
-                    style={[
-                        styles.sendOtpButton,
-                        !validateMobile(mobileNumber) && styles.buttonDisabled,
-                    ]}
-                    onPress={handleSendOtp}
-                    disabled={!validateMobile(mobileNumber)}>
-                    <Text style={styles.sendOtpText}>Send Verification Code</Text>
-                    <Text style={styles.sendOtpArrow}>➤</Text>
-                </TouchableOpacity>
-
-                {/* OTP Section */}
-                <View style={styles.thenContainer}>
-                    <View style={styles.thenLine} />
-                    <Text style={styles.thenText}>THEN</Text>
-                    <View style={styles.thenLine} />
-                </View>
-
-                <View style={styles.otpSection}>
-                    <View style={styles.otpHeader}>
-                        <Text style={styles.label}>ONE-TIME PASSWORD</Text>
-                        <Text style={styles.timerText}>
-                            {timer > 0 ? `Resend in 00:${timer.toString().padStart(2, '0')}` : (
-                                <Text onPress={handleResendOtp} style={styles.resendLink}>Resend</Text>
-                            )}
-                        </Text>
-                    </View>
-                    <View style={styles.otpContainer}>
-                        <View style={styles.otpIcon}>
-                            <Text style={styles.keyEmoji}>🔑</Text>
-                        </View>
-                        {otp.map((digit, index) => (
-                            <TextInput
-                                key={index}
-                                ref={ref => (otpRefs.current[index] = ref)}
-                                style={[
-                                    styles.otpInput,
-                                    !isOtpSent && styles.otpInputDisabled,
-                                    isAutoFilling && styles.otpInputAutoFill,
-                                ]}
-                                value={digit}
-                                onChangeText={text => handleOtpChange(text, index)}
-                                onKeyPress={e => handleOtpKeyPress(e, index)}
-                                keyboardType="number-pad"
-                                maxLength={1}
-                                editable={isOtpSent && !isAutoFilling}
-                                secureTextEntry
-                            />
-                        ))}
-                    </View>
-
-                    {/* Auto-fill OTP Button */}
-                    {isOtpSent && !isOtpValid && (
-                        <TouchableOpacity
-                            style={[
-                                styles.autoFillButton,
-                                isAutoFilling && styles.autoFillButtonDisabled,
-                            ]}
-                            onPress={handleAutoFillOtp}
-                            disabled={isAutoFilling}>
-                            <Text style={styles.autoFillIcon}>✨</Text>
-                            <Text style={styles.autoFillText}>
-                                {isAutoFilling ? 'Auto-filling...' : 'Auto-fill OTP'}
-                            </Text>
-                        </TouchableOpacity>
-                    )}
-                </View>
-
-                {/* Login Button */}
-                <TouchableOpacity
-                    style={[
-                        styles.loginButton,
-                        !isOtpValid && styles.loginButtonDisabled,
-                    ]}
-                    onPress={handleLogin}
-                    disabled={!isOtpValid}>
-                    <Text style={[
-                        styles.loginButtonText,
-                        !isOtpValid && styles.loginButtonTextDisabled,
-                    ]}>
-                        Login to Account
+                    <Text style={styles.title}>Secure OTP Login</Text>
+                    <Text style={styles.subtitle}>
+                        Verify your identity to access your dashboard.
                     </Text>
-                    <Text style={[
-                        styles.loginArrow,
-                        !isOtpValid && styles.loginButtonTextDisabled,
-                    ]}>↵</Text>
-                </TouchableOpacity>
 
-                <Text style={styles.termsText}>
-                    By logging in, you agree to our{' '}
-                    <Text style={styles.termsLink}>Terms of Service</Text>.
-                </Text>
+                    {/* Mobile Number Section */}
+                    <View style={styles.sectionContainer}>
+                        <Text style={styles.label}>MOBILE NUMBER</Text>
+                        <View style={styles.mobileInputContainer}>
+                            <View style={styles.countryCode}>
+                                <Text style={styles.flag}>🇺🇸</Text>
+                                <Text style={styles.codeText}>+1</Text>
+                            </View>
+                            <View style={styles.mobileInputWrapper}>
+                                <Text style={styles.phoneIcon}>📱</Text>
+                                <TextInput
+                                    style={styles.mobileInput}
+                                    placeholder="555-000-0000"
+                                    placeholderTextColor={COLORS.textMuted}
+                                    value={mobileNumber}
+                                    onChangeText={handleMobileChange}
+                                    keyboardType="phone-pad"
+                                    maxLength={12}
+                                />
+                                {validateMobile(mobileNumber) && (
+                                    <Text style={styles.validCheck}>✓</Text>
+                                )}
+                            </View>
+                        </View>
+                        {mobileError ? (
+                            <Text style={styles.errorText}>{mobileError}</Text>
+                        ) : null}
+                    </View>
+
+                    {/* Send OTP Button */}
+                    <TouchableOpacity
+                        style={[
+                            styles.sendOtpButton,
+                            !validateMobile(mobileNumber) && styles.buttonDisabled,
+                        ]}
+                        onPress={handleSendOtp}
+                        disabled={!validateMobile(mobileNumber)}>
+                        <Text style={styles.sendOtpText}>Send Verification Code</Text>
+                        <Text style={styles.sendOtpArrow}>➤</Text>
+                    </TouchableOpacity>
+
+                    {/* OTP Section */}
+                    <View style={styles.thenContainer}>
+                        <View style={styles.thenLine} />
+                        <Text style={styles.thenText}>THEN</Text>
+                        <View style={styles.thenLine} />
+                    </View>
+
+                    <View style={styles.otpSection}>
+                        <View style={styles.otpHeader}>
+                            <Text style={styles.label}>ONE-TIME PASSWORD</Text>
+                            <Text style={styles.timerText}>
+                                {timer > 0 ? `Resend in 00:${timer.toString().padStart(2, '0')}` : (
+                                    <Text onPress={handleResendOtp} style={styles.resendLink}>Resend</Text>
+                                )}
+                            </Text>
+                        </View>
+                        <View style={styles.otpContainer}>
+                            <View style={styles.otpIcon}>
+                                <Text style={styles.keyEmoji}>🔑</Text>
+                            </View>
+                            {otp.map((digit, index) => (
+                                <TextInput
+                                    key={index}
+                                    ref={ref => (otpRefs.current[index] = ref)}
+                                    style={[
+                                        styles.otpInput,
+                                        !isOtpSent && styles.otpInputDisabled,
+                                        isAutoFilling && styles.otpInputAutoFill,
+                                    ]}
+                                    value={digit}
+                                    onChangeText={text => handleOtpChange(text, index)}
+                                    onKeyPress={e => handleOtpKeyPress(e, index)}
+                                    keyboardType="number-pad"
+                                    maxLength={1}
+                                    editable={isOtpSent && !isAutoFilling}
+                                    secureTextEntry
+                                />
+                            ))}
+                        </View>
+
+                        {/* Auto-fill OTP Button */}
+                        {isOtpSent && !isOtpValid && (
+                            <TouchableOpacity
+                                style={[
+                                    styles.autoFillButton,
+                                    isAutoFilling && styles.autoFillButtonDisabled,
+                                ]}
+                                onPress={handleAutoFillOtp}
+                                disabled={isAutoFilling}>
+                                <Text style={styles.autoFillIcon}>✨</Text>
+                                <Text style={styles.autoFillText}>
+                                    {isAutoFilling ? 'Auto-filling...' : 'Auto-fill OTP'}
+                                </Text>
+                            </TouchableOpacity>
+                        )}
+                    </View>
+
+                    {/* Login Button */}
+                    <TouchableOpacity
+                        style={[
+                            styles.loginButton,
+                            !isOtpValid && styles.loginButtonDisabled,
+                        ]}
+                        onPress={handleLogin}
+                        disabled={!isOtpValid}>
+                        <Text style={[
+                            styles.loginButtonText,
+                            !isOtpValid && styles.loginButtonTextDisabled,
+                        ]}>
+                            Login to Account
+                        </Text>
+                        <Text style={[
+                            styles.loginArrow,
+                            !isOtpValid && styles.loginButtonTextDisabled,
+                        ]}>↵</Text>
+                    </TouchableOpacity>
+
+                    <Text style={styles.termsText}>
+                        By logging in, you agree to our{' '}
+                        <Text style={styles.termsLink}>Terms of Service</Text>.
+                    </Text>
+                </ScrollView>
             </KeyboardAvoidingView>
 
             {/* Leaf decoration at bottom */}
@@ -413,6 +421,15 @@ const styles = StyleSheet.create({
     toastSubtitle: {
         color: COLORS.textSecondary,
         fontSize: 12,
+    },
+    keyboardView: {
+        flex: 1,
+    },
+    scrollContent: {
+        flexGrow: 1,
+        paddingHorizontal: 25,
+        paddingTop: 80,
+        paddingBottom: 40,
     },
     content: {
         flex: 1,
