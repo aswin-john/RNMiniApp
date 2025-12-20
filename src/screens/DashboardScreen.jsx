@@ -16,7 +16,7 @@ import SettingsCard from '../components/dashboard/SettingsCard/SettingsCard';
 import ErrorCard from '../components/dashboard/ErrorCard/ErrorCard';
 import PostCard from '../components/posts/PostCard/PostCard';
 import BottomNav from '../components/common/BottomNav/BottomNav';
-import { COLORS } from '../utils/constants';
+import { COLORS, FONTS } from '../utils/constants';
 import { useAuth } from '../context/AuthContext';
 
 const { width } = Dimensions.get('window');
@@ -207,10 +207,11 @@ const styles = StyleSheet.create({
     },
     sectionTitle: {
         color: COLORS.text,
+        fontFamily: FONTS.bold,
         fontSize: 18,
-        fontWeight: '600',
     },
     viewAllText: {
+        fontFamily: FONTS.medium,
         color: COLORS.primary,
         fontSize: 14,
     },
@@ -225,8 +226,8 @@ const styles = StyleSheet.create({
     },
     logoutText: {
         color: COLORS.error,
+        fontFamily: FONTS.bold,
         fontSize: 15,
-        fontWeight: '600',
     },
 });
 

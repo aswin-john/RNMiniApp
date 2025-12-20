@@ -1,5 +1,5 @@
 import { StyleSheet, Animated } from 'react-native';
-import { COLORS } from '../../../utils/constants';
+import { COLORS, FONTS } from '../../../utils/constants';
 
 const styles = StyleSheet.create({
     toast: {
@@ -33,10 +33,11 @@ const styles = StyleSheet.create({
     },
     toastTitle: {
         color: COLORS.text,
+        fontFamily: FONTS.semibold,
         fontSize: 14,
-        fontWeight: '600',
     },
     toastSubtitle: {
+        fontFamily: FONTS.regular,
         color: COLORS.textSecondary,
         fontSize: 12,
     },

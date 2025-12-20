@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { COLORS } from '../../../utils/constants';
+import { COLORS, FONTS } from '../../../utils/constants';
 
 const styles = StyleSheet.create({
     otpSection: {
@@ -12,15 +12,18 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     label: {
+        fontFamily: FONTS.regular,
         fontSize: 11,
         color: COLORS.textMuted,
         letterSpacing: 1,
     },
     timerText: {
+        fontFamily: FONTS.regular,
         color: COLORS.textSecondary,
         fontSize: 12,
     },
     resendLink: {
+        fontFamily: FONTS.medium,
         color: COLORS.primary,
     },
     otpContainer: {
@@ -38,6 +41,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
     },
     otpInput: {
+        fontFamily: FONTS.bold,
         flex: 1,
         height: 45,
         backgroundColor: 'transparent',
@@ -83,9 +87,9 @@ const styles = StyleSheet.create({
         marginRight: 8,
     },
     autoFillText: {
+        fontFamily: FONTS.semibold,
         color: COLORS.primary,
         fontSize: 14,
-        fontWeight: '600',
     },
 });
 

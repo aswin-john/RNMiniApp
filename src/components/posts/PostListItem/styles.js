@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { COLORS } from '../../../utils/constants';
+import { COLORS, FONTS } from '../../../utils/constants';
 
 const styles = StyleSheet.create({
     postCard: {
@@ -22,30 +22,32 @@ const styles = StyleSheet.create({
     },
     postAvatarText: {
         color: '#FFF',
+        fontFamily: FONTS.bold,
         fontSize: 14,
-        fontWeight: '700',
     },
     postMeta: {
         marginLeft: 12,
     },
     postId: {
         color: COLORS.text,
+        fontFamily: FONTS.semibold,
         fontSize: 14,
-        fontWeight: '600',
     },
     postUser: {
+        fontFamily: FONTS.regular,
         color: COLORS.textSecondary,
         fontSize: 12,
     },
     postTitle: {
         color: COLORS.text,
+        fontFamily: FONTS.bold,
         fontSize: 16,
-        fontWeight: '600',
         marginBottom: 8,
         lineHeight: 22,
         textTransform: 'capitalize',
     },
     postBody: {
+        fontFamily: FONTS.regular,
         color: COLORS.textSecondary,
         fontSize: 14,
         lineHeight: 20,

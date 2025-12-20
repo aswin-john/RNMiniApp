@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { COLORS } from '../../../utils/constants';
+import { COLORS, FONTS } from '../../../utils/constants';
 
 const styles = StyleSheet.create({
     bottomNav: {
@@ -35,8 +35,8 @@ const styles = StyleSheet.create({
     },
     navTextActive: {
         color: COLORS.primary,
+        fontFamily: FONTS.medium,
         fontSize: 11,
-        fontWeight: '500',
     },
     fabContainer: {
         marginTop: -30,

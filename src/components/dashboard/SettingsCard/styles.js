@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { COLORS } from '../../../utils/constants';
+import { COLORS, FONTS } from '../../../utils/constants';
 
 const styles = StyleSheet.create({
     settingsCard: {
@@ -30,10 +30,11 @@ const styles = StyleSheet.create({
     },
     settingsTitle: {
         color: COLORS.text,
+        fontFamily: FONTS.semibold,
         fontSize: 15,
-        fontWeight: '600',
     },
     settingsSubtitle: {
+        fontFamily: FONTS.regular,
         color: COLORS.textSecondary,
         fontSize: 12,
     },

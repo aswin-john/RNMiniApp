@@ -17,9 +17,10 @@ export const COLORS = {
 };
 
 export const FONTS = {
-    regular: 'System',
-    medium: 'System',
-    bold: 'System',
+    regular: 'Manrope-Regular',
+    medium: 'Manrope-Medium',
+    bold: 'Poppins-Bold',
+    semibold: 'Poppins-SemiBold',
 };
 
 export const MOCK_USER = {

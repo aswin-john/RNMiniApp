@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { COLORS } from '../../../utils/constants';
+import { COLORS, FONTS } from '../../../utils/constants';
 
 const styles = StyleSheet.create({
     menuCard: {
@@ -21,11 +21,12 @@ const styles = StyleSheet.create({
     },
     menuCardTitle: {
         color: COLORS.text,
+        fontFamily: FONTS.semibold,
         fontSize: 16,
-        fontWeight: '600',
         marginBottom: 4,
     },
     menuCardSubtitle: {
+        fontFamily: FONTS.regular,
         color: COLORS.textSecondary,
         fontSize: 12,
     },

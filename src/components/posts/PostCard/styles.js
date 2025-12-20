@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { COLORS } from '../../../utils/constants';
+import { COLORS, FONTS } from '../../../utils/constants';
 
 const styles = StyleSheet.create({
     postCard: {
@@ -37,8 +37,8 @@ const styles = StyleSheet.create({
     },
     postTitle: {
         color: COLORS.text,
+        fontFamily: FONTS.semibold,
         fontSize: 15,
-        fontWeight: '600',
         marginBottom: 6,
     },
     postDescription: {

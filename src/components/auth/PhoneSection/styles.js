@@ -1,11 +1,12 @@
 import { StyleSheet } from 'react-native';
-import { COLORS } from '../../../utils/constants';
+import { COLORS, FONTS } from '../../../utils/constants';
 
 const styles = StyleSheet.create({
     sectionContainer: {
         marginBottom: 15,
     },
     label: {
+        fontFamily: FONTS.regular,
         fontSize: 11,
         color: COLORS.textMuted,
         letterSpacing: 1,
@@ -23,11 +24,13 @@ const styles = StyleSheet.create({
         borderRadius: 12,
     },
     phoneTextInput: {
+        fontFamily: FONTS.medium,
         color: COLORS.text,
         fontSize: 16,
         paddingVertical: 0,
     },
     phoneCodeText: {
+        fontFamily: FONTS.medium,
         color: COLORS.text,
         fontSize: 16,
     },
@@ -38,6 +41,7 @@ const styles = StyleSheet.create({
         borderRightColor: COLORS.border,
     },
     errorText: {
+        fontFamily: FONTS.regular,
         color: COLORS.error,
         fontSize: 12,
         marginTop: 5,

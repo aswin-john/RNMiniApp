@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { COLORS } from '../../../utils/constants';
+import { COLORS, FONTS } from '../../../utils/constants';
 
 const styles = StyleSheet.create({
     header: {
@@ -25,8 +25,8 @@ const styles = StyleSheet.create({
     },
     headerTitle: {
         color: COLORS.text,
+        fontFamily: FONTS.semibold,
         fontSize: 18,
-        fontWeight: '600',
     },
     placeholder: {
         width: 40,

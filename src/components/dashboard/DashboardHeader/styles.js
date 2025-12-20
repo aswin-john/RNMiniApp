@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { COLORS } from '../../../utils/constants';
+import { COLORS, FONTS } from '../../../utils/constants';
 
 const styles = StyleSheet.create({
     header: {
@@ -26,8 +26,8 @@ const styles = StyleSheet.create({
     },
     avatarText: {
         color: COLORS.background,
+        fontFamily: FONTS.bold,
         fontSize: 20,
-        fontWeight: 'bold',
     },
     onlineIndicator: {
         position: 'absolute',
@@ -45,10 +45,11 @@ const styles = StyleSheet.create({
     },
     greeting: {
         color: COLORS.text,
+        fontFamily: FONTS.semibold,
         fontSize: 18,
-        fontWeight: '600',
     },
     welcomeBack: {
+        fontFamily: FONTS.regular,
         color: COLORS.textSecondary,
         fontSize: 13,
     },

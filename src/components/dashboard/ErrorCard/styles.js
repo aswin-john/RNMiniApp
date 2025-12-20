@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { COLORS } from '../../../utils/constants';
+import { COLORS, FONTS } from '../../../utils/constants';
 
 const styles = StyleSheet.create({
     errorCard: {
@@ -21,11 +21,12 @@ const styles = StyleSheet.create({
     },
     errorTitle: {
         color: COLORS.text,
+        fontFamily: FONTS.semibold,
         fontSize: 18,
-        fontWeight: '600',
         marginBottom: 5,
     },
     errorSubtitle: {
+        fontFamily: FONTS.regular,
         color: COLORS.textSecondary,
         fontSize: 13,
         marginBottom: 15,
@@ -44,9 +45,9 @@ const styles = StyleSheet.create({
         marginRight: 6,
     },
     retryText: {
+        fontFamily: FONTS.medium,
         color: COLORS.text,
         fontSize: 13,
-        fontWeight: '500',
     },
     cloudIcon: {
         position: 'absolute',

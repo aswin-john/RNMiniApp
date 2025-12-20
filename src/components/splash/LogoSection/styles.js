@@ -1,5 +1,5 @@
 import { StyleSheet, Dimensions } from 'react-native';
-import { COLORS } from '../../../utils/constants';
+import { COLORS, FONTS } from '../../../utils/constants';
 
 const { height } = Dimensions.get('window');
 
@@ -44,13 +44,14 @@ const styles = StyleSheet.create({
         transform: [{ rotate: '45deg' }],
     },
     title: {
+        fontFamily: FONTS.bold,
         fontSize: 32,
-        fontWeight: '900',
         color: COLORS.text,
         marginTop: 30,
         letterSpacing: 4,
     },
     subtitle: {
+        fontFamily: FONTS.regular,
         fontSize: 16,
         color: COLORS.textSecondary,
         textAlign: 'center',

@@ -19,7 +19,7 @@ import TextDivider from '../components/common/TextDivider/TextDivider';
 import LoginHeader from '../components/auth/LoginHeader/LoginHeader';
 import PhoneSection from '../components/auth/PhoneSection/PhoneSection';
 import OtpSection from '../components/auth/OtpSection/OtpSection';
-import { COLORS } from '../utils/constants';
+import { COLORS, FONTS } from '../utils/constants';
 import { useAuth } from '../context/AuthContext';
 
 
@@ -322,11 +322,13 @@ const styles = StyleSheet.create({
         paddingBottom: 40,
     },
     termsText: {
+        fontFamily: FONTS.regular,
         color: COLORS.textSecondary,
         fontSize: 12,
         textAlign: 'center',
     },
     termsLink: {
+        fontFamily: FONTS.medium,
         color: COLORS.text,
         textDecorationLine: 'underline',
     },

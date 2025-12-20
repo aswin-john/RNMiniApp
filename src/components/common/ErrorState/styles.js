@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { COLORS } from '../../../utils/constants';
+import { COLORS, FONTS } from '../../../utils/constants';
 
 const styles = StyleSheet.create({
     centerContainer: {
@@ -22,11 +22,12 @@ const styles = StyleSheet.create({
     },
     errorTitle: {
         color: COLORS.text,
+        fontFamily: FONTS.bold,
         fontSize: 20,
-        fontWeight: '600',
         marginBottom: 10,
     },
     errorMessage: {
+        fontFamily: FONTS.regular,
         color: COLORS.textSecondary,
         fontSize: 14,
         textAlign: 'center',

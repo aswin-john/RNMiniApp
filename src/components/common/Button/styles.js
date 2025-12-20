@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { COLORS } from '../../../utils/constants';
+import { COLORS, FONTS } from '../../../utils/constants';
 
 const styles = StyleSheet.create({
     continueButton: {
@@ -16,8 +16,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: 30,
     },
     buttonText: {
+        fontFamily: FONTS.semibold,
         fontSize: 16,
-        fontWeight: '600',
         color: COLORS.background,
         marginRight: 10,
     },

@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { COLORS } from '../../../utils/constants';
+import { COLORS, FONTS } from '../../../utils/constants';
 
 const styles = StyleSheet.create({
     lockContainer: {
@@ -18,13 +18,14 @@ const styles = StyleSheet.create({
         fontSize: 28,
     },
     title: {
+        fontFamily: FONTS.bold,
         fontSize: 24,
-        fontWeight: '700',
         color: COLORS.text,
         textAlign: 'center',
         marginBottom: 8,
     },
     subtitle: {
+        fontFamily: FONTS.regular,
         fontSize: 14,
         color: COLORS.textSecondary,
         textAlign: 'center',
