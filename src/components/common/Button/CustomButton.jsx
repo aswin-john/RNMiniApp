@@ -1,7 +1,7 @@
 import React from 'react';
 import { TouchableOpacity, Text } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { COLORS } from '../../utils/constants';
+import { COLORS } from '../../../utils/constants';
 import styles from './styles';
 
 const CustomButton = ({
