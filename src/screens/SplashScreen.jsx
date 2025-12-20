@@ -8,6 +8,7 @@ import {
     Dimensions,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import CustomButton from '../components/Button/CustomButton';
 import { COLORS } from '../utils/constants';
 
 const { width, height } = Dimensions.get('window');
@@ -41,16 +42,10 @@ const SplashScreen = ({ navigation }) => {
 
             {/* Bottom Section */}
             <View style={styles.bottomSection}>
-                <TouchableOpacity style={styles.continueButton} onPress={handleContinue}>
-                    <LinearGradient
-                        colors={[COLORS.primary, COLORS.primaryDark]}
-                        start={{ x: 0, y: 0 }}
-                        end={{ x: 1, y: 0 }}
-                        style={styles.buttonGradient}>
-                        <Text style={styles.buttonText}>Continue to Login</Text>
-                        <Text style={styles.arrow}>→</Text>
-                    </LinearGradient>
-                </TouchableOpacity>
+                <CustomButton
+                    title="Continue to Login"
+                    onPress={handleContinue}
+                />
 
                 <View style={styles.createAccountContainer}>
                     <Text style={styles.newHereText}>New here? </Text>
@@ -128,29 +123,6 @@ const styles = StyleSheet.create({
         width: '100%',
         paddingHorizontal: 30,
         alignItems: 'center',
-    },
-    continueButton: {
-        width: '100%',
-        borderRadius: 30,
-        overflow: 'hidden',
-        marginBottom: 20,
-    },
-    buttonGradient: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingVertical: 16,
-        paddingHorizontal: 30,
-    },
-    buttonText: {
-        fontSize: 16,
-        fontWeight: '600',
-        color: COLORS.background,
-        marginRight: 10,
-    },
-    arrow: {
-        fontSize: 20,
-        color: COLORS.background,
     },
     createAccountContainer: {
         flexDirection: 'row',
