@@ -9,18 +9,19 @@ import {
     KeyboardAvoidingView,
     Platform,
     Animated,
-    Dimensions,
     ScrollView,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import PhoneInput from 'react-native-phone-number-input';
 import { COLORS } from '../utils/constants';
 import { useAuth } from '../context/AuthContext';
 
-const { width } = Dimensions.get('window');
 
 const LoginScreen = ({ navigation }) => {
     const { login } = useAuth();
-    const [mobileNumber, setMobileNumber] = useState('');
+    const [value, setValue] = useState('');
+    const [formattedValue, setFormattedValue] = useState('');
+    const [valid, setValid] = useState(false);
     const [otp, setOtp] = useState(['', '', '', '', '', '']);
     const [isOtpSent, setIsOtpSent] = useState(false);
     const [isOtpValid, setIsOtpValid] = useState(false);
@@ -29,6 +30,8 @@ const LoginScreen = ({ navigation }) => {
     const [showToast, setShowToast] = useState(false);
     const [mockOtp, setMockOtp] = useState('123456'); // Mock OTP for demo
     const [isAutoFilling, setIsAutoFilling] = useState(false); // Auto-fill animation state
+
+    const phoneInput = useRef(null);
     const toastAnim = useRef(new Animated.Value(-100)).current;
     const otpRefs = useRef([]);
     const autoFillTimeoutRef = useRef(null);
@@ -82,24 +85,6 @@ const LoginScreen = ({ navigation }) => {
         }
     };
 
-    const validateMobile = (number) => {
-        const cleaned = number.replace(/\D/g, '');
-        return cleaned.length === 10;
-    };
-
-    const formatMobileNumber = (text) => {
-        const cleaned = text.replace(/\D/g, '');
-        if (cleaned.length <= 3) return cleaned;
-        if (cleaned.length <= 6) return `${cleaned.slice(0, 3)}-${cleaned.slice(3)}`;
-        return `${cleaned.slice(0, 3)}-${cleaned.slice(3, 6)}-${cleaned.slice(6, 10)}`;
-    };
-
-    const handleMobileChange = (text) => {
-        const formatted = formatMobileNumber(text);
-        setMobileNumber(formatted);
-        setMobileError('');
-    };
-
     const showOtpToast = () => {
         setShowToast(true);
         Animated.sequence([
@@ -118,8 +103,8 @@ const LoginScreen = ({ navigation }) => {
     };
 
     const handleSendOtp = () => {
-        if (!validateMobile(mobileNumber)) {
-            setMobileError('Please enter a valid 10-digit mobile number');
+        if (!valid) {
+            setMobileError('Please enter a valid mobile number');
             return;
         }
         // Clear any previous OTP
@@ -250,27 +235,30 @@ const LoginScreen = ({ navigation }) => {
                     {/* Mobile Number Section */}
                     <View style={styles.sectionContainer}>
                         <Text style={styles.label}>MOBILE NUMBER</Text>
-                        <View style={styles.mobileInputContainer}>
-                            <View style={styles.countryCode}>
-                                <Text style={styles.flag}>🇺🇸</Text>
-                                <Text style={styles.codeText}>+1</Text>
-                            </View>
-                            <View style={styles.mobileInputWrapper}>
-                                <Text style={styles.phoneIcon}>📱</Text>
-                                <TextInput
-                                    style={styles.mobileInput}
-                                    placeholder="555-000-0000"
-                                    placeholderTextColor={COLORS.textMuted}
-                                    value={mobileNumber}
-                                    onChangeText={handleMobileChange}
-                                    keyboardType="phone-pad"
-                                    maxLength={12}
-                                />
-                                {validateMobile(mobileNumber) && (
-                                    <Text style={styles.validCheck}>✓</Text>
-                                )}
-                            </View>
-                        </View>
+                        <PhoneInput
+                            ref={phoneInput}
+                            defaultValue={value}
+                            defaultCode="IN"
+                            layout="first"
+                            onChangeText={(text) => {
+                                setValue(text);
+                                const checkValid = phoneInput.current?.isValidNumber(text);
+                                setValid(checkValid);
+                                setMobileError('');
+                            }}
+                            onChangeFormattedText={(text) => {
+                                setFormattedValue(text);
+                            }}
+                            containerStyle={styles.phoneContainer}
+                            textContainerStyle={styles.phoneTextContainer}
+                            textInputStyle={styles.phoneTextInput}
+                            codeTextStyle={styles.phoneCodeText}
+                            flagButtonStyle={styles.phoneFlagButton}
+                            renderDropdownImage={<Text style={{ color: 'white', fontSize: 10 }}>▼</Text>}
+                            placeholder="Enter mobile number"
+                            withDarkTheme
+                            autoFocus={false}
+                        />
                         {mobileError ? (
                             <Text style={styles.errorText}>{mobileError}</Text>
                         ) : null}
@@ -280,10 +268,10 @@ const LoginScreen = ({ navigation }) => {
                     <TouchableOpacity
                         style={[
                             styles.sendOtpButton,
-                            !validateMobile(mobileNumber) && styles.buttonDisabled,
+                            !valid && styles.buttonDisabled,
                         ]}
                         onPress={handleSendOtp}
-                        disabled={!validateMobile(mobileNumber)}>
+                        disabled={!valid}>
                         <Text style={styles.sendOtpText}>Send Verification Code</Text>
                         <Text style={styles.sendOtpArrow}>➤</Text>
                     </TouchableOpacity>
@@ -473,49 +461,29 @@ const styles = StyleSheet.create({
         letterSpacing: 1,
         marginBottom: 10,
     },
-    mobileInputContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 10,
-    },
-    countryCode: {
-        flexDirection: 'row',
-        alignItems: 'center',
+    phoneContainer: {
+        width: '100%',
         backgroundColor: COLORS.surface,
-        paddingHorizontal: 12,
-        paddingVertical: 14,
         borderRadius: 12,
-        gap: 8,
+        height: 60,
     },
-    flag: {
-        fontSize: 18,
+    phoneTextContainer: {
+        backgroundColor: 'transparent',
+        paddingVertical: 0,
+        borderRadius: 12,
     },
-    codeText: {
+    phoneTextInput: {
+        color: COLORS.text,
+        fontSize: 16,
+        paddingVertical: 0,
+    },
+    phoneCodeText: {
         color: COLORS.text,
         fontSize: 16,
     },
-    mobileInputWrapper: {
-        flex: 1,
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: COLORS.surface,
-        paddingHorizontal: 12,
-        borderRadius: 12,
-    },
-    phoneIcon: {
-        fontSize: 16,
-        marginRight: 8,
-    },
-    mobileInput: {
-        flex: 1,
-        color: COLORS.text,
-        fontSize: 16,
-        paddingVertical: 14,
-    },
-    validCheck: {
-        color: COLORS.primary,
-        fontSize: 18,
-        fontWeight: 'bold',
+    phoneFlagButton: {
+        borderTopLeftRadius: 12,
+        borderBottomLeftRadius: 12,
     },
     errorText: {
         color: COLORS.error,
@@ -526,10 +494,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: COLORS.text,
+        backgroundColor: COLORS.primary,
         paddingVertical: 16,
         borderRadius: 30,
         marginBottom: 20,
+        marginTop: 10,
     },
     buttonDisabled: {
         opacity: 0.5,
