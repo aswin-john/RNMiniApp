@@ -27,6 +27,7 @@ const LoginScreen = ({ navigation }) => {
     const [isOtpValid, setIsOtpValid] = useState(false);
     const [timer, setTimer] = useState(30);
     const [mobileError, setMobileError] = useState('');
+    const [otpError, setOtpError] = useState('');
     const [showToast, setShowToast] = useState(false);
     const [mockOtp, setMockOtp] = useState('123456'); // Mock OTP for demo
     const [isAutoFilling, setIsAutoFilling] = useState(false); // Auto-fill animation state
@@ -136,6 +137,7 @@ const LoginScreen = ({ navigation }) => {
         const newOtp = [...otp];
         newOtp[index] = text;
         setOtp(newOtp);
+        setOtpError(''); // Clear error when user types
 
         // Auto-focus next input
         if (text && index < 5) {
@@ -154,13 +156,23 @@ const LoginScreen = ({ navigation }) => {
     };
 
     const handleLogin = async () => {
-        // Mock OTP validation (accept any 6-digit OTP)
+        const enteredOtp = otp.join('');
+
         if (isOtpValid) {
-            await login();
-            navigation.reset({
-                index: 0,
-                routes: [{ name: 'Dashboard' }],
-            });
+            if (enteredOtp === mockOtp) {
+                setOtpError('');
+                await login();
+                navigation.reset({
+                    index: 0,
+                    routes: [{ name: 'Dashboard' }],
+                });
+            } else {
+                setOtpError('Invalid OTP. Please try again.');
+                // Optional: clear OTP on error
+                // setOtp(['', '', '', '', '', '']);
+                // setIsOtpValid(false);
+                // otpRefs.current[0]?.focus();
+            }
         }
     };
 
@@ -304,6 +316,7 @@ const LoginScreen = ({ navigation }) => {
                                         styles.otpInput,
                                         !isOtpSent && styles.otpInputDisabled,
                                         isAutoFilling && styles.otpInputAutoFill,
+                                        otpError && styles.otpInputError,
                                     ]}
                                     value={digit}
                                     onChangeText={text => handleOtpChange(text, index)}
@@ -315,6 +328,10 @@ const LoginScreen = ({ navigation }) => {
                                 />
                             ))}
                         </View>
+
+                        {otpError ? (
+                            <Text style={styles.otpErrorText}>{otpError}</Text>
+                        ) : null}
 
                         {/* Auto-fill OTP Button */}
                         {isOtpSent && !isOtpValid && (
@@ -575,6 +592,17 @@ const styles = StyleSheet.create({
     },
     otpInputAutoFill: {
         backgroundColor: 'rgba(46, 204, 113, 0.1)',
+    },
+    otpInputError: {
+        borderBottomWidth: 2,
+        borderBottomColor: COLORS.error,
+        color: COLORS.error,
+    },
+    otpErrorText: {
+        color: COLORS.error,
+        fontSize: 12,
+        marginTop: 8,
+        textAlign: 'center',
     },
     autoFillButton: {
         flexDirection: 'row',
