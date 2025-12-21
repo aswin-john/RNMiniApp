@@ -11,6 +11,7 @@ import {
     Animated,
     ScrollView,
 } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 import LinearGradient from 'react-native-linear-gradient';
 import PhoneInput from 'react-native-phone-number-input';
 import Toast from '../components/common/Toast/Toast';
@@ -251,7 +252,7 @@ const LoginScreen = ({ navigation }) => {
                         disabled={!valid}
                         solid={true}
                         backgroundColor={COLORS.primary}
-                        arrow="➤"
+                        iconName="arrow-forward"
                         style={{ marginTop: 10 }}
                     />
 
@@ -277,7 +278,7 @@ const LoginScreen = ({ navigation }) => {
                         disabled={!isOtpValid}
                         solid={true}
                         backgroundColor={COLORS.surface}
-                        arrow="↵"
+                        iconName="log-in-outline"
                         style={{
                             borderWidth: 1,
                             borderColor: isOtpValid ? COLORS.primary : COLORS.border,
@@ -302,7 +303,7 @@ const LoginScreen = ({ navigation }) => {
 
             {/* Leaf decoration at bottom */}
             <View style={styles.bottomLeaf}>
-                <Text style={styles.leafEmoji}>🌿</Text>
+                <Icon name="leaf-outline" size={24} color={COLORS.primary} style={{ opacity: 0.6 }} />
             </View>
         </LinearGradient>
     );

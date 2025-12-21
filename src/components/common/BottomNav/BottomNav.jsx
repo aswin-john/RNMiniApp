@@ -1,16 +1,17 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { COLORS } from '../../../utils/constants';
 import styles from './styles';
 
 const BottomNav = ({ activeTab = 'Home', onTabPress }) => {
     const tabs = [
-        { id: 'Home', icon: '🏠', label: 'Home' },
-        { id: 'Search', icon: '🔍', label: 'Search' },
+        { id: 'Home', icon: 'home-outline', activeIcon: 'home', label: 'Home' },
+        { id: 'Search', icon: 'search-outline', activeIcon: 'search', label: 'Search' },
         { id: 'FAB', isFab: true },
-        { id: 'Quest', icon: '💬', label: 'Quest' },
-        { id: 'Profile', icon: '👤', label: 'Profile' },
+        { id: 'Quest', icon: 'chatbubbles-outline', activeIcon: 'chatbubbles', label: 'Quest' },
+        { id: 'Profile', icon: 'person-outline', activeIcon: 'person', label: 'Profile' },
     ];
 
     return (
@@ -22,7 +23,7 @@ const BottomNav = ({ activeTab = 'Home', onTabPress }) => {
                             <LinearGradient
                                 colors={[COLORS.primary, COLORS.primaryDark]}
                                 style={styles.fab}>
-                                <Text style={styles.fabIcon}>+</Text>
+                                <Icon name="add" size={32} color={COLORS.text} />
                             </LinearGradient>
                         </TouchableOpacity>
                     );
@@ -34,9 +35,11 @@ const BottomNav = ({ activeTab = 'Home', onTabPress }) => {
                         key={idx}
                         style={styles.navItem}
                         onPress={() => onTabPress?.(tab.id)}>
-                        <Text style={isActive ? styles.navIconActive : styles.navIcon}>
-                            {tab.icon}
-                        </Text>
+                        <Icon
+                            name={isActive ? tab.activeIcon : tab.icon}
+                            size={24}
+                            color={isActive ? COLORS.primary : COLORS.textMuted}
+                        />
                         <Text style={isActive ? styles.navTextActive : styles.navText}>
                             {tab.label}
                         </Text>

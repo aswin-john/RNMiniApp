@@ -1,5 +1,7 @@
 import React from 'react';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { COLORS } from '../../../utils/constants';
 import styles from './styles';
 
 const OtpSection = ({
@@ -27,7 +29,7 @@ const OtpSection = ({
             </View>
             <View style={styles.otpContainer}>
                 <View style={styles.otpIcon}>
-                    <Text style={styles.keyEmoji}>🔑</Text>
+                    <Icon name="key-outline" size={20} color={COLORS.primary} />
                 </View>
                 {otp.map((digit, index) => (
                     <TextInput
@@ -63,7 +65,7 @@ const OtpSection = ({
                     ]}
                     onPress={onAutoFillOtp}
                     disabled={isAutoFilling}>
-                    <Text style={styles.autoFillIcon}>✨</Text>
+                    <Icon name="sparkles-outline" size={16} color={COLORS.primary} style={{ marginRight: 8 }} />
                     <Text style={styles.autoFillText}>
                         {isAutoFilling ? 'Auto-filling...' : 'Auto-fill OTP'}
                     </Text>

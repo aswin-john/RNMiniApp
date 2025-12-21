@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { COLORS } from '../../../utils/constants';
 import styles from './styles';
 
@@ -24,7 +25,7 @@ const DashboardHeader = ({ name, onMenuPress }) => {
                 </View>
             </View>
             <TouchableOpacity style={styles.menuButton} onPress={onMenuPress}>
-                <Text style={styles.menuIcon}>☰</Text>
+                <Icon name="grid-outline" size={24} color={COLORS.text} />
             </TouchableOpacity>
         </View>
     );

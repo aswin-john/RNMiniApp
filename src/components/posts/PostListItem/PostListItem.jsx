@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import Icon from 'react-native-vector-icons/Ionicons';
 import styles from './styles';
 
 const PostListItem = ({ item, index }) => {
@@ -34,15 +35,15 @@ const PostListItem = ({ item, index }) => {
             </Text>
             <View style={styles.postFooter}>
                 <View style={styles.postAction}>
-                    <Text style={styles.actionIcon}>❤️</Text>
+                    <Icon name="heart-outline" size={18} color="#9CA3AF" />
                     <Text style={styles.actionText}>{Math.floor(Math.random() * 50)}</Text>
                 </View>
                 <View style={styles.postAction}>
-                    <Text style={styles.actionIcon}>💬</Text>
+                    <Icon name="chatbubble-outline" size={18} color="#9CA3AF" />
                     <Text style={styles.actionText}>{Math.floor(Math.random() * 20)}</Text>
                 </View>
                 <View style={styles.postAction}>
-                    <Text style={styles.actionIcon}>🔗</Text>
+                    <Icon name="share-social-outline" size={18} color="#9CA3AF" />
                     <Text style={styles.actionText}>Share</Text>
                 </View>
             </View>

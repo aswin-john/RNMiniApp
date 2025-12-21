@@ -1,6 +1,7 @@
 import React from 'react';
 import { TouchableOpacity, Text, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { COLORS } from '../../../utils/constants';
 import styles from './styles';
 
@@ -12,6 +13,9 @@ const CustomButton = ({
     backgroundColor = COLORS.primary,
     showArrow = true,
     arrow = '→',
+    iconName = 'chevron-forward',
+    iconSize = 20,
+    iconColor,
     disabled = false,
     style,
     buttonStyle,
@@ -37,7 +41,18 @@ const CustomButton = ({
         >
             <ContentWrapper {...wrapperProps}>
                 <Text style={[styles.buttonText, textStyle]}>{title}</Text>
-                {showArrow && <Text style={[styles.arrow, arrowStyle]}>{arrow}</Text>}
+                {showArrow && (
+                    iconName ? (
+                        <Icon
+                            name={iconName}
+                            size={iconSize}
+                            color={iconColor || (textStyle?.color || COLORS.textInverse)}
+                            style={arrowStyle}
+                        />
+                    ) : (
+                        <Text style={[styles.arrow, arrowStyle]}>{arrow}</Text>
+                    )
+                )}
             </ContentWrapper>
         </TouchableOpacity>
     );

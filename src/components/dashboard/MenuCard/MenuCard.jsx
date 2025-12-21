@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text, TouchableOpacity } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import Icon from 'react-native-vector-icons/Ionicons';
 import styles from './styles';
 
 const MenuCard = ({ item, onPress }) => {
@@ -13,7 +14,7 @@ const MenuCard = ({ item, onPress }) => {
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
                 style={styles.menuCardGradient}>
-                <Text style={styles.menuCardIcon}>{item.icon}</Text>
+                <Icon name={item.iconName || 'document-text-outline'} size={24} color="#FFF" />
             </LinearGradient>
             <Text style={styles.menuCardTitle}>{item.title}</Text>
             <Text style={styles.menuCardSubtitle}>{item.subtitle}</Text>

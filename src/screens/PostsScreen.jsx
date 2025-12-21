@@ -9,6 +9,7 @@ import {
     StatusBar,
     ActivityIndicator,
 } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 import LinearGradient from 'react-native-linear-gradient';
 import ScreenHeader from '../components/common/ScreenHeader/ScreenHeader';
 import LoadingState from '../components/common/LoadingState/LoadingState';
@@ -83,7 +84,7 @@ const PostsScreen = ({ navigation }) => {
             {/* Offline Banner */}
             {showingCached && (
                 <View style={styles.offlineBanner}>
-                    <Text style={styles.offlineIcon}>📱</Text>
+                    <Icon name="cloud-offline-outline" size={20} color={COLORS.primary} style={{ marginRight: 10 }} />
                     <Text style={styles.offlineText}>
                         You are offline. Showing cached data.
                     </Text>

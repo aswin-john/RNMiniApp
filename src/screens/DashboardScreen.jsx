@@ -10,6 +10,7 @@ import {
     Image,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import Icon from 'react-native-vector-icons/Ionicons';
 import DashboardHeader from '../components/dashboard/DashboardHeader/DashboardHeader';
 import MenuCard from '../components/dashboard/MenuCard/MenuCard';
 import SettingsCard from '../components/dashboard/SettingsCard/SettingsCard';
@@ -30,7 +31,7 @@ const DashboardScreen = ({ navigation }) => {
             id: 'posts',
             title: 'My Posts',
             subtitle: 'View history',
-            icon: '📝',
+            iconName: 'document-text-outline',
             color: '#FF6B6B',
             gradient: ['#FF6B6B', '#FF8E53'],
         },
@@ -38,7 +39,7 @@ const DashboardScreen = ({ navigation }) => {
             id: 'profile',
             title: 'Profile',
             subtitle: 'Edit details',
-            icon: '👤',
+            iconName: 'person-outline',
             color: '#4ECDC4',
             gradient: ['#4ECDC4', '#44A08D'],
         },
@@ -46,7 +47,7 @@ const DashboardScreen = ({ navigation }) => {
             id: 'settings',
             title: 'Settings',
             subtitle: 'App preferences',
-            icon: '⚙️',
+            iconName: 'settings-outline',
             color: '#A8A8A8',
             gradient: ['#606060', '#404040'],
         },
@@ -57,9 +58,9 @@ const DashboardScreen = ({ navigation }) => {
             id: '1',
             title: 'Project Alpha Update',
             description: "We have successfully deployed the first phase of the alpha test. The new caching strategy has...",
-            tags: ['🏷️ Image', '🔧 Technology'],
+            tags: ['Image', 'Technology'],
             gradient: ['#FF6B6B', '#FF8E53'],
-            icon: '🚀',
+            iconName: 'rocket-outline',
             likes: 0,
             comments: 0
         },
@@ -67,9 +68,9 @@ const DashboardScreen = ({ navigation }) => {
             id: '2',
             title: 'Design System V2',
             description: "The new tokens are now available in the repository. We've updated the color palette to support higher contrast ratios in dark mode...",
-            tags: ['🏷️ 3 Images', '🎨 Design'],
+            tags: ['3 Images', 'Design'],
             gradient: ['#4ECDC4', '#556270'],
-            icon: '🎨',
+            iconName: 'color-palette-outline',
             likes: 12,
             comments: 5
         }
@@ -96,7 +97,7 @@ const DashboardScreen = ({ navigation }) => {
             {/* Offline Banner */}
             {isOffline && (
                 <View style={styles.offlineBanner}>
-                    <Text style={styles.offlineIcon}>📡</Text>
+                    <Icon name="cloud-offline-outline" size={16} color={COLORS.primary} style={{ marginRight: 10 }} />
                     <Text style={styles.offlineText}>You are currently offline. Saving cached content.</Text>
                 </View>
             )}
