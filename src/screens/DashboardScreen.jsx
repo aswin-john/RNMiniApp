@@ -14,7 +14,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import DashboardHeader from '../components/dashboard/DashboardHeader/DashboardHeader';
 import MenuCard from '../components/dashboard/MenuCard/MenuCard';
 import SettingsCard from '../components/dashboard/SettingsCard/SettingsCard';
-import ErrorCard from '../components/dashboard/ErrorCard/ErrorCard';
+
 import PostCard from '../components/posts/PostCard/PostCard';
 import BottomNav from '../components/common/BottomNav/BottomNav';
 import { COLORS, FONTS } from '../utils/constants';
@@ -138,11 +138,11 @@ const DashboardScreen = ({ navigation }) => {
                         </TouchableOpacity>
                     </View>
 
-                    <ErrorCard
+                    {/* <ErrorCard
                         title="Connection Lost"
                         subtitle="Cannot fetch new posts."
                         onRetry={() => console.log('Retry fetch posts')}
-                    />
+                    /> */}
 
                     {samplePosts.map(post => (
                         <PostCard key={post.id} post={post} />
